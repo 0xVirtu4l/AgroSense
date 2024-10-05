@@ -41,11 +41,7 @@ AgroSense is currently in the development phase.
 *managing sensor devices, including adding and deleting sensors.*
 
 ---
-## Case Desgine:
-![Case Design](assets/Case/case_design.png)
-*The Case of Agrosense , desgined for compactness and reliability.*
 
----
 ## Hardware Components
 
 ### Current Components
