@@ -65,13 +65,8 @@ AgroSense is currently in the development phase.
 ---
 ## Case Desgine:
 *The Prototype Case of Agrosense , desgined for compactness and reliability.*
-![image](https://github.com/user-attachments/assets/12f072e1-6920-4c22-a344-004abe447a85)
+![image](https://github.com/user-attachments/assets/e595662e-29e6-4f77-8510-c4a2eb844ec0)
 
-![image](https://github.com/user-attachments/assets/e0f464d3-a654-43e9-8204-61c5cc54ad30)
-
-![image](https://github.com/user-attachments/assets/b7d2e5d5-aa5d-42d3-b1bc-e6bb48db5de9)
-
-![image](https://github.com/user-attachments/assets/3dfc6943-d84c-41c1-b969-ff94e7281dbd)
 
 
 ---
