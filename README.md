@@ -48,7 +48,7 @@ AgroSense is currently in the development phase.
 
 ### Current Components
 
-- **ESP8266 Microcontroller:** Handles Wi-Fi connectivity and data transmission.
+- **ESP Microcontroller:** Handles Wi-Fi connectivity and data transmission.
 - **DHT22 Sensor:** Measures temperature and humidity.
 - **Soil Moisture Sensor:** Monitors soil moisture levels.
 - **Breadboard & Wires:** For prototyping and circuit connections.
@@ -70,7 +70,7 @@ AgroSense is currently in the development phase.
 
 ![Circuit Design](Images/Dashboard/connections.jpg)
 
-*A detailed schematic of the AgroSense circuit illustrating connections between the ESP8266 and various sensors.*
+*A detailed schematic of the AgroSense circuit illustrating connections between the ESP and various sensors.*
 ---
 ## Software Components
 
