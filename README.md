@@ -78,7 +78,8 @@ AgroSense is currently in the development phase.
 *A detailed schematic of the AgroSense prototype circuit illustrating connections between the ESP and various sensors.*
 ---
 ## Software Components
-
+- **C++ for ESP Programming:** Core programming language for handling ESP functionality.
+- **WiFiManager Module:** WiFi Connection manager with a fallback web configuration portal to easily set up the device's Wi-Fi network.
 - **Flask:** Backend framework for handling server-side operations.
 - **Flask-Login:** Manages user authentication and session management.
 - **Flask-WTF:** Handles form validations and CSRF protection.
