@@ -5,6 +5,8 @@
 
 AgroSense is an innovative IoT-based agricultural monitoring system designed to empower farmers with real-time insights into their crops' health and environmental conditions. By seamlessly integrating hardware sensors with a user-friendly web dashboard, AgroSense facilitates data-driven decision-making to optimize crop yield and resource management.
 
+
+AgroSense Dashboard : https://virtu4l.pythonanywhere.com/
 ---
 
 ## Features
