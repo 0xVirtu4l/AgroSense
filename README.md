@@ -68,7 +68,7 @@ AgroSense is currently in the development phase.
 
 ## Circuit Diagram:
 
-![Circuit Design](assets/circuit_designs/circuit_design.png)
+![Circuit Design](Images/Dashboard/connections.jpg)
 
 *A detailed schematic of the AgroSense circuit illustrating connections between the ESP8266 and various sensors.*
 ---
