@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-light sidebar">
+            <h4 class="mt-3">Sensors</h4>
+            <ul class="list-group" id="deviceList">
+                {% for device in devices %}
+                <li class="list-group-item d-flex justify-content-between align-items-center device-item" data-device-id="{{ device.device_id }}">
+                    <span class="device-name">{{ device.plant_type }}</span> 
+                    <button class="btn btn-sm btn-danger delete-device-btn" data-device-id="{{ device.device_id }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#addDeviceModal">Add Sensor</button>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="mainContent" class="col-md-9">
+            <h2 class="text-center mt-3">Select a sensor to view data</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Add Device Modal -->
+<div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: #3DB16B;">
+        <h5 class="modal-title" id="addDeviceModalLabel">Add Sensor</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ url_for('dashboard') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.device_id.label(class="form-label") }}
+                {{ form.device_id(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.plant_type.label(class="form-label") }}
+                {{ form.plant_type(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.location.label(class="form-label") }}
+                {{ form.location(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-success") }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deviceItems = document.querySelectorAll('.device-item .device-name');
+        deviceItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const deviceId = this.parentElement.getAttribute('data-device-id');
+                loadDeviceData(deviceId);
+            });
+        });
+
+        // Handle device deletion
+        const deleteButtons = document.querySelectorAll('.delete-device-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();  // Prevent triggering the device selection
+                const deviceId = this.getAttribute('data-device-id');
+                deleteDevice(deviceId);
+            });
+        });
+
+        const notificationIcon = document.getElementById('notificationDropdown');
+        if (notificationIcon) {
+            notificationIcon.addEventListener('click', function() {
+                const dropdown = this.nextElementSibling;
+                dropdown.classList.toggle('show');
+            });
+        }
+    });
+
+    function loadDeviceData(deviceId) {
+        fetch(`/api/device_data/${deviceId}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Error: ${res.status} ${res.statusText}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    throw new Error(data.message);
+                }
+
+                const device = data.device;
+                const sensorData = data.sensor_data;
+                const plantType = device.plant_type; 
+                console.log(device, sensorData);
+                fetch('/static/data/normal_plants.json')
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Failed to load normal_plants.json');
+                        }
+                        return res.json();
+                    })
+                    .then(plantsData => {
+                        const plantNorms = plantsData[plantType];
+                        if (!plantNorms) {
+                            throw new Error('Plant norms not found for the selected plant type.');
+                        }
+
+                        let content = `
+                            <h2 class="text-center mt-3">Device Data - ${device.plant_type}</h2>
+                            <div id="map" style="height: 300px;"></div>
+                            <div class="row mt-4">
+                                <!-- Plant Health Card -->
+<div class="col-md-12">
+    <div class="card mb-3" id="plantHealthCard">
+        <div class="card-body text-center">
+            <h5 class="card-title">Plant Health</h5>
+            <p class="card-text" id="plantHealthStatus">90%</p>
+        </div>
+    </div>
+</div>
+                            </div>
+                            <div class="row mt-4">
+                                <!-- Summary Cards -->
+                                <div class="col-md-4">
+                                    <div class="card mb-3" id="temperatureCard">
+                                        <div class="card-header">
+                                            <i class="fas fa-thermometer-half icon"></i>
+                                            Temperature
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title" id="temperatureValue">--</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card mb-3" id="humidityCard">
+                                        <div class="card-header">
+                                            <i class="fas fa-tint icon"></i>
+                                            Humidity
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title" id="humidityValue">--</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card mb-3" id="soilMoistureCard">
+                                        <div class="card-header">
+                                            <i class="fas fa-water icon"></i>
+                                            Soil Moisture
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title" id="soilMoistureValue">--</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Charts -->
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h4>Temperature Over Time</h4>
+                                    <canvas id="temperatureChart"></canvas>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Humidity Over Time</h4>
+                                    <canvas id="humidityChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h4>Soil Moisture Over Time</h4>
+                                    <canvas id="soilMoistureChart"></canvas>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Update main content
+                        document.getElementById('mainContent').innerHTML = content;
+
+                        // Initialize the map if location data is available
+                        if (sensorData.length > 0) {
+                            const latestData = sensorData[sensorData.length - 1];
+                            const { temperature, humidity, soil_moisture, latitude, longitude } = latestData;
+
+                            // Display latest values
+                            document.getElementById('temperatureValue').innerText = `${temperature}°C`;
+                            document.getElementById('humidityValue').innerText = `${humidity}%`;
+                            document.getElementById('soilMoistureValue').innerText = `${soil_moisture}%`;
+
+                            if (latitude && longitude) {
+                                var map = L.map('map').setView([latitude, longitude], 13);
+
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '&copy; OpenStreetMap contributors'
+                                }).addTo(map);
+
+                                L.marker([latitude, longitude]).addTo(map)
+                                    .bindPopup(`${device.plant_type} Location`)
+                                    .openPopup();
+                            } else {
+                                document.getElementById('map').innerHTML = '<p>No location data available.</p>';
+                            }
+
+                            // Set Plant Health to 90% for now
+                            const plantHealthPercentage = 90;
+                            updatePlantHealth(plantHealthPercentage);
+
+
+                            createCharts(sensorData);
+                        } else {
+                            // No sensor data available
+                            document.getElementById('temperatureValue').innerText = '--';
+                            document.getElementById('humidityValue').innerText = '--';
+                            document.getElementById('soilMoistureValue').innerText = '--';
+                            document.getElementById('map').innerHTML = '<p>No sensor data available.</p>';
+                            document.getElementById('plantHealthStatus').innerText = '90%';
+                            updatePlantHealth(90);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error processing plant norms:', err);
+                        document.getElementById('mainContent').innerHTML = '<h3 class="text-center mt-3">Error loading device data.</h3>';
+                    });
+            })
+            .catch(error => {
+                console.error('Error fetching device data:', error);
+                document.getElementById('mainContent').innerHTML = '<h3 class="text-center mt-3">Error loading device data.</h3>';
+            });
+    }
+
+    function createCharts(sensorData) {
+        const timestamps = sensorData.map(entry => entry.timestamp);
+        const temperatures = sensorData.map(entry => entry.temperature);
+        const humidities = sensorData.map(entry => entry.humidity);
+        const soilMoistures = sensorData.map(entry => entry.soil_moisture);
+
+        // Temperature Chart
+        new Chart(document.getElementById('temperatureChart'), {
+            type: 'line',
+            data: {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: temperatures,
+                    borderColor: '#FF6384',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Timestamp'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Temperature (°C)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Humidity Chart
+        new Chart(document.getElementById('humidityChart'), {
+            type: 'line',
+            data: {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Humidity (%)',
+                    data: humidities,
+                    borderColor: '#36A2EB',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Timestamp'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Humidity (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('soilMoistureChart'), {
+            type: 'line',
+            data: {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Soil Moisture (%)',
+                    data: soilMoistures,
+                    borderColor: '#FFCE56',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Timestamp'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Soil Moisture (%)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updatePlantHealth(percentage) {
+        const plantHealthStatus = document.getElementById('plantHealthStatus');
+        plantHealthStatus.innerText = `${percentage}%`;
+
+        // Determine text color based on percentage
+        if (percentage >= 70) {
+            plantHealthStatus.style.color = '#3DB16B'; // Green
+        } else if (percentage >= 40) {
+            plantHealthStatus.style.color = '#FFA500'; // Orange
+        } else {
+            plantHealthStatus.style.color = '#FF4757'; // Red
+        }
+
+        const plantHealthCard = document.getElementById('plantHealthCard');
+        plantHealthCard.style.boxShadow = `0 4px 8px rgba(0, 0, 0, 0.2)`;
+
+    }
+
+    function deleteDevice(deviceId) {
+        if (confirm('Are you sure you want to delete this device? This action cannot be undone.')) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch(`/delete_device/${deviceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({})
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Device deleted successfully.');
+                    location.reload();
+                } else {
+                    alert('Error deleting device.');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting device:', error);
+                alert('Error deleting device.');
+            });
+        }
+    }
+    function updatePlantHealth(percentage) {
+        const plantHealthStatus = document.getElementById('plantHealthStatus');
+        plantHealthStatus.innerText = `${percentage}%`;
+    
+        if (percentage >= 70) {
+            plantHealthStatus.style.color = '#3DB16B'; // Green
+        } else if (percentage >= 40) {
+            plantHealthStatus.style.color = '#FFA500'; // Orange
+        } else {
+            plantHealthStatus.style.color = '#FF4757'; // Red
+        }
+    
+        const plantHealthCard = document.getElementById('plantHealthCard');
+        plantHealthCard.style.boxShadow = `0 4px 8px rgba(0, 0, 0, 0.2)`;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,225 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Body and Typography */
+body {
+    background-color: #f4f6f9; 
+    color: #444444;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 20px;
+}
+
+.navbar .navbar-brand {
+    color: #3DB16B;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.navbar .nav-link {
+    color: #444444;
+    margin-left: 15px;
+}
+
+.navbar .nav-link:hover {
+    color: #3DB16B;
+}
+
+/* Notifications Icon */
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.notification-icon .fa-bell {
+    font-size: 1.5em;
+    color: #444444;
+}
+
+.notification-icon .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #ff4757;
+    color: #fff;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-size: 0.8em;
+}
+
+.notifications-dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.notification-icon:hover .notifications-dropdown {
+    display: block;
+}
+
+.dropdown-menu .dropdown-item {
+    white-space: normal;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #fff;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    overflow-y: auto;
+    width: 20%;
+}
+
+.sidebar h4 {
+    color: #444444;
+    margin-bottom: 20px;
+}
+
+.sidebar .list-group-item {
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sidebar .list-group-item:hover {
+    background-color: #f1f1f1;
+}
+
+.sidebar .btn-primary {
+    background-color: #3DB16B;
+    border-color: #3DB16B;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.sidebar .btn-primary:hover {
+    background-color: #37a160;
+    border-color: #37a160;
+}
+
+/* Main Content */
+#mainContent {
+    margin-left: 20%;
+    padding: 20px;
+}
+
+#mainContent h2 {
+    color: #3DB16B;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Cards */
+.card {
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #444444;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: none;
+    font-size: 1em;
+    font-weight: bold;
+    color: #444444;
+    display: flex;
+    align-items: center;
+}
+
+.card-header .icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+    color: #3DB16B;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: #3DB16B;
+}
+
+
+
+/* Charts */
+canvas {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 8px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.close {
+    font-size: 1.5em;
+    opacity: 1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        height: auto;
+        width: 100%;
+    }
+    
+    #mainContent {
+        margin-left: 0;
+    }
+}
+/* Plant Health Card */
+#plantHealthCard {
+    background-color: #ffffff; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+#plantHealthCard:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+#plantHealthStatus {
+    font-size: 2em;
+    font-weight: bold;
+}

@@ -1,0 +1,18 @@
+{
+    "Tomato": {
+        "plant_maximum_temp": 30,
+        "plant_minimum_temp": 18,
+        "plant_maximum_Humidity": 80,
+        "plant_minimum_Humidity": 60,
+        "plant_maximum_SoilMoisture": 70,
+        "plant_minimum_SoilMoisture": 50
+    },
+    "Cucumber": {
+        "plant_maximum_temp": 28,
+        "plant_minimum_temp": 16,
+        "plant_maximum_Humidity": 75,
+        "plant_minimum_Humidity": 55,
+        "plant_maximum_SoilMoisture": 65,
+        "plant_minimum_SoilMoisture": 45
+    }
+}
