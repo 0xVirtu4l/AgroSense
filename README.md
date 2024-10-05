@@ -21,8 +21,7 @@ AgroSense is an innovative IoT-based agricultural monitoring system designed to 
 
 🚧 **Under Development** 🚧
 
-AgroSense is currently in the development phase. We're continuously working on enhancing features, improving hardware designs, and refining the user interface to provide the best possible experience.
-
+AgroSense is currently in the development phase.
 ---
 
 ## Screenshots
