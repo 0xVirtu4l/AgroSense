@@ -28,13 +28,13 @@ AgroSense is currently in the development phase.
 
 ### 1. Dashboard Overview
 
-![Dashboard Screenshot](assets/Images/Dashboard/Dashbaord_Main.png)
+![Dashboard Screenshot](Images/Dashboard/Dashbaord_Main.png)
 
 *The main dashboard displaying real-time sensor data and plant health status.*
 
 ### 2. Device Management
 
-![Device Management](assets/Images/Dashboard/Add_Sensor.png)
+![Device Management](Images/Dashboard/Add_Sensor.png)
 
 *managing sensor devices, including adding and deleting sensors.*
 
