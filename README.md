@@ -61,7 +61,7 @@ AgroSense is currently in the development phase.
 - **GPS Module:** Tracks the geographical location of the device.
 - **Light Sensor:** Monitors ambient light conditions.
 - **Solar Battery Charger:** Utilizes solar energy to recharge the lithium battery.
-
+- **LCD Screen**: Allows for easy configuration of the ESP, including Wi-Fi network connection setup
 ---
 ## Case Desgine:
 ### <center>*The Prototype Case of Agrosense , desgined for compactness and reliability.*</center>
